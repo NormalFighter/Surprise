@@ -4,7 +4,21 @@ const nextBtn = document.getElementById('next-btn'); // Next button
 const prevBtn = document.getElementById('prev-btn'); // Previous button
 
 let currentSlide = 0; // Track the current slide
-let currentAudio = null; // Track the currently playing audio
+let currentAudio = null; // Track the currently playing wish audio
+
+// BGM Control
+const bgm = document.getElementById('bgm'); // Background music element
+let isMusicUnmuted = false; // To track if BGM has been unmuted
+
+// Function to unmute the BGM
+function unmuteBGM() {
+    if (!isMusicUnmuted) {
+        bgm.muted = false; // Unmute the music
+        bgm.volume = 0.3;  // Set volume to 30%
+        isMusicUnmuted = true; // Ensure it only unmutes once
+        console.log("BGM unmuted.");
+    }
+}
 
 // Function to show a slide based on the index
 function showSlide(index) {
@@ -19,7 +33,7 @@ function showSlide(index) {
         currentSlide = index;
     }
 
-    // Pause and reset the currently playing audio
+    // Pause and reset the currently playing wish audio
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
         currentAudio.currentTime = 0;  // Reset audio to the beginning
@@ -36,6 +50,9 @@ function showSlide(index) {
         currentAudio = audio;  // Track the current audio
     }
 
+    // Unmute the BGM on the first interaction
+    unmuteBGM();
+
     // Show or hide navigation buttons based on the current slide
     prevBtn.style.display = currentSlide === 0 ? 'none' : 'block';
     nextBtn.style.display = currentSlide === totalSlides - 1 ? 'none' : 'block';
@@ -45,9 +62,8 @@ function showSlide(index) {
 nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
 prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
 
-// Swipe detection for mobile
+// Swipe detection for mobile (also unmutes the BGM)
 let touchStartX = 0;
-
 document.addEventListener('touchstart', (event) => {
     touchStartX = event.touches[0].clientX;
 });
@@ -64,9 +80,13 @@ document.addEventListener('touchend', (event) => {
     }
 });
 
+// Unmute BGM when the user clicks anywhere on the page
+document.addEventListener('click', () => {
+    unmuteBGM();
+});
+
 // Show the landing page initially
 showSlide(currentSlide);
-
 
 /*-------------------------------------------------*/
 // Confetti code
@@ -134,14 +154,3 @@ Confettiful.prototype._renderConfetti = function () {
 
 // Instantiate confetti only on the landing page
 window.confettiful = new Confettiful(document.querySelector(".js-container"));
-
-const bgm = document.getElementById('bgm');
-const volumeSlider = document.getElementById('volume-slider');
-
-// Set the default volume
-bgm.volume = 0.2;  // Set to 30% by default
-
-// Event listener to update BGM volume based on slider input
-volumeSlider.addEventListener('input', function() {
-    bgm.volume = volumeSlider.value;
-});
