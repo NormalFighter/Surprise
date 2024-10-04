@@ -134,3 +134,14 @@ Confettiful.prototype._renderConfetti = function () {
 
 // Instantiate confetti only on the landing page
 window.confettiful = new Confettiful(document.querySelector(".js-container"));
+
+const bgm = document.getElementById('bgm');
+const volumeSlider = document.getElementById('volume-slider');
+
+// Set the default volume
+bgm.volume = 0.2;  // Set to 30% by default
+
+// Event listener to update BGM volume based on slider input
+volumeSlider.addEventListener('input', function() {
+    bgm.volume = volumeSlider.value;
+});
