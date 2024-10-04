@@ -4,7 +4,7 @@ const nextBtn = document.getElementById('next-btn'); // Next button
 const prevBtn = document.getElementById('prev-btn'); // Previous button
 
 let currentSlide = 0; // Track the current slide
-let currentAudio = null; // Track the currently playing audio
+let currentAudio = null;
 
 // Function to show a slide based on the index
 function showSlide(index) {
@@ -36,6 +36,15 @@ function showSlide(index) {
         currentAudio = audio;  // Track the current audio
     }
 
+    // If it's the first friend's slide (index 1), delay audio playback slightly
+    if (currentSlide === 1 && audio) {
+        setTimeout(() => {
+            audio.play();
+        }, 500); // Adjust delay (500ms) to allow confetti to settle
+    } else if (audio) {
+        audio.play();
+    }
+
     // Show or hide navigation buttons based on the current slide
     prevBtn.style.display = currentSlide === 0 ? 'none' : 'block';
     nextBtn.style.display = currentSlide === totalSlides - 1 ? 'none' : 'block';
@@ -47,6 +56,7 @@ prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
 
 // Swipe detection for mobile
 let touchStartX = 0;
+
 document.addEventListener('touchstart', (event) => {
     touchStartX = event.touches[0].clientX;
 });
@@ -66,16 +76,6 @@ document.addEventListener('touchend', (event) => {
 // Show the landing page initially
 showSlide(currentSlide);
 
-const bgm = document.getElementById('bgm');
-const volumeSlider = document.getElementById('volume-slider');
-
-// Set the default volume
-bgm.volume = 0.2;  // Set to 30% by default
-
-// Event listener to update BGM volume based on slider input
-volumeSlider.addEventListener('input', function() {
-    bgm.volume = volumeSlider.value;
-});
 
 /*-------------------------------------------------*/
 const Confettiful = function (el) {
