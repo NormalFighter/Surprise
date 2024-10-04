@@ -4,7 +4,7 @@ const nextBtn = document.getElementById('next-btn'); // Next button
 const prevBtn = document.getElementById('prev-btn'); // Previous button
 
 let currentSlide = 0; // Track the current slide
-let currentAudio = null;
+let currentAudio = null; // Track the currently playing audio
 
 // Function to show a slide based on the index
 function showSlide(index) {
@@ -19,7 +19,7 @@ function showSlide(index) {
         currentSlide = index;
     }
 
-    // Pause the current audio if it's playing
+    // Pause and reset the currently playing audio
     if (currentAudio && !currentAudio.paused) {
         currentAudio.pause();
         currentAudio.currentTime = 0;  // Reset audio to the beginning
@@ -34,15 +34,6 @@ function showSlide(index) {
         audio.volume = 0.8;  // Set wish audio volume higher (80%)
         audio.play();
         currentAudio = audio;  // Track the current audio
-    }
-
-    // If it's the first friend's slide (index 1), delay audio playback slightly
-    if (currentSlide === 1 && audio) {
-        setTimeout(() => {
-            audio.play();
-        }, 500); // Adjust delay (500ms) to allow confetti to settle
-    } else if (audio) {
-        audio.play();
     }
 
     // Show or hide navigation buttons based on the current slide
@@ -78,6 +69,7 @@ showSlide(currentSlide);
 
 
 /*-------------------------------------------------*/
+// Confetti code
 const Confettiful = function (el) {
     this.el = el;
     this.containerEl = null;
@@ -142,4 +134,3 @@ Confettiful.prototype._renderConfetti = function () {
 
 // Instantiate confetti only on the landing page
 window.confettiful = new Confettiful(document.querySelector(".js-container"));
-
